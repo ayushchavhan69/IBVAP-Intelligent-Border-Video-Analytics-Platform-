@@ -1,7 +1,7 @@
 export function renderStatCards(stats) {
   return `
     <div class="stats-strip">
-      <!-- Persons Detected -->
+      <!-- 1. Total Persons Detected -->
       <div class="stat-card">
         <div class="stat-icon-wrapper blue">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -12,16 +12,16 @@ export function renderStatCards(stats) {
           <span class="stat-label">${stats.persons.label}</span>
           <span class="stat-value">${stats.persons.count}</span>
           <span class="stat-trend positive">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="19" x2="12" y2="5"></line>
               <polyline points="5 12 12 5 19 12"></polyline>
             </svg>
-            ${stats.persons.change} vs yesterday
+            ${stats.persons.change.replace('+', '')} vs yesterday
           </span>
         </div>
       </div>
 
-      <!-- Vehicles Detected -->
+      <!-- 2. Total Vehicles Detected -->
       <div class="stat-card">
         <div class="stat-icon-wrapper green">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -34,18 +34,18 @@ export function renderStatCards(stats) {
           <span class="stat-label">${stats.vehicles.label}</span>
           <span class="stat-value">${stats.vehicles.count}</span>
           <span class="stat-trend positive">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="19" x2="12" y2="5"></line>
               <polyline points="5 12 12 5 19 12"></polyline>
             </svg>
-            ${stats.vehicles.change} vs yesterday
+            ${stats.vehicles.change.replace('+', '')} vs yesterday
           </span>
         </div>
       </div>
 
-      <!-- Known Faces Matched -->
+      <!-- 3. Known Faces Matched -->
       <div class="stat-card">
-        <div class="stat-icon-wrapper amber">
+        <div class="stat-icon-wrapper purple">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
             <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
@@ -60,18 +60,18 @@ export function renderStatCards(stats) {
           <span class="stat-label">${stats.faces.label}</span>
           <span class="stat-value">${stats.faces.count}</span>
           <span class="stat-trend positive">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="19" x2="12" y2="5"></line>
               <polyline points="5 12 12 5 19 12"></polyline>
             </svg>
-            ${stats.faces.change} vs yesterday
+            ${stats.faces.change.replace('+', '')} vs yesterday
           </span>
         </div>
       </div>
 
-      <!-- ANPR Detections -->
+      <!-- 4. ANPR Detections -->
       <div class="stat-card">
-        <div class="stat-icon-wrapper purple">
+        <div class="stat-icon-wrapper orange">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect width="20" height="12" x="2" y="6" rx="2"></rect>
             <path d="M7 12h2"></path>
@@ -83,16 +83,16 @@ export function renderStatCards(stats) {
           <span class="stat-label">${stats.anpr.label}</span>
           <span class="stat-value">${stats.anpr.count}</span>
           <span class="stat-trend positive">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="19" x2="12" y2="5"></line>
               <polyline points="5 12 12 5 19 12"></polyline>
             </svg>
-            ${stats.anpr.change} vs yesterday
+            ${stats.anpr.change.replace('+', '')} vs yesterday
           </span>
         </div>
       </div>
 
-      <!-- Active Alerts -->
+      <!-- 5. Active Alerts -->
       <div class="stat-card">
         <div class="stat-icon-wrapper red">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">

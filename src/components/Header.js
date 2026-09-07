@@ -1,33 +1,49 @@
-export function renderHeader(activeView = 'Dashboard', cameraCount = 4) {
+export function renderHeader(activeView = 'Dashboard') {
   return `
     <header class="header">
       <div class="header-left">
-        <h1 class="header-title">${activeView}</h1>
-        <span class="header-subtitle">Real-time overview of border surveillance</span>
+        <button class="hamburger-btn" id="sidebar-hamburger-btn" title="Toggle Navigation">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <div class="header-title-block">
+          <h1 class="header-title">${activeView}</h1>
+          <span class="header-subtitle">Real-time overview of border surveillance operations</span>
+        </div>
       </div>
 
       <div class="header-right">
-        <select class="cam-filter-select" id="camera-filter-select" title="Filter by camera">
-          <option value="all">📹 All Cameras (${cameraCount})</option>
-          <option value="cam-1">BOP Alpha - North Gate</option>
-          <option value="cam-2">Check Post - Road 32</option>
-          <option value="cam-3">BOP Alpha - East Fence (Breach)</option>
-          <option value="cam-4">Border Road - Sector 7</option>
-        </select>
-
-        <div class="header-search">
-          <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.3-4.3"></path>
+        <!-- Location Dropdown Pill -->
+        <button class="header-pill-btn" id="header-location-pill" title="Filter by Location">
+          <svg class="pill-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
           </svg>
-          <input 
-            type="text" 
-            class="header-search-input" 
-            id="global-search-input"
-            placeholder="Search (e.g., camera, location, event...)" 
-          />
-        </div>
+          <span>All Locations</span>
+          <svg class="pill-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
 
+        <!-- Date Picker Pill -->
+        <button class="header-pill-btn" id="header-date-pill" title="Select Date">
+          <svg class="pill-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span>25 May 2025</span>
+          <svg class="pill-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        <!-- Notification Bell with Red Badge 12 -->
         <button class="header-notification-btn" id="header-notif-btn" title="View 12 Active Alerts">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
@@ -36,35 +52,18 @@ export function renderHeader(activeView = 'Dashboard', cameraCount = 4) {
           <span class="notification-count" id="notif-count-badge">12</span>
         </button>
 
-        <button class="header-notification-btn" id="audio-toggle-btn" title="Toggle Tactical Alert Sound">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="sound-icon">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-          </svg>
-        </button>
-
-        <button class="header-notification-btn" id="header-settings-btn" title="System Settings">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
-            <circle cx="12" cy="12" r="3"></circle>
-          </svg>
-        </button>
-
+        <!-- Operator Profile Pill -->
         <div class="header-operator-pill" id="operator-profile-pill">
           <div class="operator-avatar">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
           </div>
           <div class="operator-details">
             <span class="operator-name">Operator</span>
-            <span class="operator-role">Border Post Alpha</span>
+            <span class="operator-role">BOP Alpha</span>
           </div>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-tertiary);">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
         </div>
       </div>
     </header>
