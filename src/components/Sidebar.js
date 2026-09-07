@@ -111,7 +111,7 @@ export function renderSidebar(activeNav = 'Dashboard') {
 
         <div class="sidebar-footer">
           <div class="bsf-badge">
-            <img src="/assets/bsf_crest.png" alt="Border Security Force" class="bsf-crest" />
+            <img src="/assets/bsf_crest_silver.png" alt="Border Security Force" class="bsf-crest" />
             <div class="bsf-info">
               <span class="bsf-title">Border Security Force</span>
               <span class="bsf-motto">Securing Our Borders</span>
