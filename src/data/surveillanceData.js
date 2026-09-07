@@ -1,8 +1,8 @@
 export const initialSurveillanceData = {
   stats: {
-    persons: { count: '1,246', change: '+12%', label: 'Total Persons Detected', color: 'blue' },
+    cameras: { count: '48', sub: '42 Online', label: 'Total Cameras', color: 'cyan' },
+    persons: { count: '1,246', change: '+12%', label: 'Total Persons Detected', color: 'teal' },
     vehicles: { count: '342', change: '+8%', label: 'Total Vehicles Detected', color: 'green' },
-    faces: { count: '18', change: '+5%', label: 'Known Faces Matched', color: 'amber' },
     anpr: { count: '128', change: '+15%', label: 'ANPR Detections', color: 'purple' },
     alerts: { count: '7', linkText: 'View all alerts →', label: 'Active Alerts', color: 'red' }
   },
@@ -135,12 +135,16 @@ export const initialSurveillanceData = {
   ],
 
   analytics: {
-    donut: [
-      { label: 'Human Detected', count: '1,246', pct: '45%', color: '#3B82F6' },
-      { label: 'Vehicle Detected', count: '342', pct: '25%', color: '#10B981' },
-      { label: 'Intrusion', count: '128', pct: '16%', color: '#EF4444' },
-      { label: 'ANPR', count: '128', pct: '14%', color: '#A855F7' }
-    ],
+    donut: {
+      total: '1,844',
+      items: [
+        { label: 'Intrusion', count: '652', pct: '35%', color: '#EF4444' },
+        { label: 'Vehicle', count: '542', pct: '29%', color: '#3B82F6' },
+        { label: 'Loitering', count: '362', pct: '20%', color: '#F97316' },
+        { label: 'ANPR', count: '128', pct: '7%', color: '#A855F7' },
+        { label: 'Other', count: '160', pct: '9%', color: '#06B6D4' }
+      ]
+    },
     timeline: [
       { time: '00:00', count: 18 },
       { time: '02:00', count: 24 },
@@ -164,7 +168,8 @@ export const initialSurveillanceData = {
       { rank: 5, name: 'Check Post - Main Gate', count: 156, pct: 30 }
     ],
     health: {
-      status: 'All Systems Operational',
+      score: '98%',
+      status: 'Healthy',
       metrics: [
         { name: 'Cameras', val: '98%', status: 'good' },
         { name: 'AI Engine', val: '99%', status: 'good' },

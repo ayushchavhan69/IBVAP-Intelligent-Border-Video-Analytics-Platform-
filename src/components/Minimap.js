@@ -2,7 +2,7 @@ export function renderMinimap() {
   return `
     <div class="map-card">
       <div class="alerts-header">
-        <span class="alerts-title">Live Map Overview</span>
+        <span class="alerts-title">Map Overview</span>
         <a class="alerts-view-all" id="btn-view-full-map">View Full Map</a>
       </div>
 
@@ -43,6 +43,21 @@ export function renderMinimap() {
           style="top: 60%; left: 83%; color: #10B981; background: #10B981;"
           title="Forward Patrol Post East"
         ></div>
+
+        <!-- Map Tactical Controls Overlay -->
+        <div class="map-controls-overlay">
+          <button class="map-ctrl-btn" id="map-zoom-in" title="Zoom In">+</button>
+          <button class="map-ctrl-btn" id="map-zoom-out" title="Zoom Out">−</button>
+          <button class="map-ctrl-btn" id="map-recenter" title="Recenter Map">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="8"></circle>
+              <line x1="12" y1="2" x2="12" y2="6"></line>
+              <line x1="12" y1="18" x2="12" y2="22"></line>
+              <line x1="2" y1="12" x2="6" y2="12"></line>
+              <line x1="18" y1="12" x2="22" y2="12"></line>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   `;

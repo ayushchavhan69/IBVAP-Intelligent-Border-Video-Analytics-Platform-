@@ -1,18 +1,35 @@
 export function renderStatCards(stats) {
   return `
     <div class="stats-strip">
-      <!-- 1. Total Persons Detected -->
+      <!-- 1. Total Cameras -->
       <div class="stat-card">
-        <div class="stat-icon-wrapper blue">
+        <div class="stat-icon-wrapper cyan">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+            <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+          </svg>
+        </div>
+        <div class="stat-details">
+          <span class="stat-label">${stats.cameras ? stats.cameras.label : 'Total Cameras'}</span>
+          <span class="stat-value">${stats.cameras ? stats.cameras.count : '48'}</span>
+          <span class="stat-trend positive" style="color: #10B981;">
+            <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10B981; margin-right: 4px;"></span>
+            ${stats.cameras ? stats.cameras.sub : '42 Online'}
+          </span>
+        </div>
+      </div>
+
+      <!-- 2. Total Persons Detected -->
+      <div class="stat-card">
+        <div class="stat-icon-wrapper teal">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
           </svg>
         </div>
         <div class="stat-details">
           <span class="stat-label">${stats.persons.label}</span>
           <span class="stat-value">${stats.persons.count}</span>
           <span class="stat-trend positive">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="19" x2="12" y2="5"></line>
               <polyline points="5 12 12 5 19 12"></polyline>
             </svg>
@@ -21,7 +38,7 @@ export function renderStatCards(stats) {
         </div>
       </div>
 
-      <!-- 2. Total Vehicles Detected -->
+      <!-- 3. Total Vehicles Detected -->
       <div class="stat-card">
         <div class="stat-icon-wrapper green">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -34,7 +51,7 @@ export function renderStatCards(stats) {
           <span class="stat-label">${stats.vehicles.label}</span>
           <span class="stat-value">${stats.vehicles.count}</span>
           <span class="stat-trend positive">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="19" x2="12" y2="5"></line>
               <polyline points="5 12 12 5 19 12"></polyline>
             </svg>
@@ -43,35 +60,9 @@ export function renderStatCards(stats) {
         </div>
       </div>
 
-      <!-- 3. Known Faces Matched -->
-      <div class="stat-card">
-        <div class="stat-icon-wrapper purple">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
-            <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
-            <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
-            <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M9 9h.01"></path>
-            <path d="M15 9h.01"></path>
-          </svg>
-        </div>
-        <div class="stat-details">
-          <span class="stat-label">${stats.faces.label}</span>
-          <span class="stat-value">${stats.faces.count}</span>
-          <span class="stat-trend positive">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="19" x2="12" y2="5"></line>
-              <polyline points="5 12 12 5 19 12"></polyline>
-            </svg>
-            ${stats.faces.change.replace('+', '')} vs yesterday
-          </span>
-        </div>
-      </div>
-
       <!-- 4. ANPR Detections -->
       <div class="stat-card">
-        <div class="stat-icon-wrapper orange">
+        <div class="stat-icon-wrapper purple">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect width="20" height="12" x="2" y="6" rx="2"></rect>
             <path d="M7 12h2"></path>
@@ -83,7 +74,7 @@ export function renderStatCards(stats) {
           <span class="stat-label">${stats.anpr.label}</span>
           <span class="stat-value">${stats.anpr.count}</span>
           <span class="stat-trend positive">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="19" x2="12" y2="5"></line>
               <polyline points="5 12 12 5 19 12"></polyline>
             </svg>
@@ -102,7 +93,7 @@ export function renderStatCards(stats) {
         <div class="stat-details">
           <span class="stat-label">${stats.alerts.label}</span>
           <span class="stat-value">${stats.alerts.count}</span>
-          <a class="stat-trend alert-link" id="view-active-alerts-link">
+          <a class="stat-trend negative" id="stat-view-alerts" style="color: #F87171; text-decoration: none; cursor: pointer;">
             ${stats.alerts.linkText}
           </a>
         </div>

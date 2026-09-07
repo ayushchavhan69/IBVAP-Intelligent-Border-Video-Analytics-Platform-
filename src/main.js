@@ -9,12 +9,13 @@ import { renderHeader } from './components/Header.js';
 import { renderStatCards } from './components/StatCards.js';
 import { renderSurveillanceGrid } from './components/SurveillanceGrid.js';
 import { renderAlertsPanel } from './components/AlertsPanel.js';
+import { renderMinimap } from './components/Minimap.js';
 import { renderAnalyticsStrip } from './components/AnalyticsStrip.js';
 import { renderIncidentModal } from './components/IncidentModal.js';
 import { renderCameraDetailModal } from './components/CameraDetailModal.js';
 import { renderNotificationDrawer } from './components/NotificationDrawer.js';
 import { renderLiveViewScreen, renderEventsScreen, renderFullMapScreen } from './components/ViewTemplates.js';
-import { playRadarBeep, playAlertTone, toggleSound } from './utils/audio.js';
+import { playRadarBeep, playAlertTone, toggleSound, isSoundEnabled } from './utils/audio.js';
 
 // Application State
 const state = {
@@ -60,7 +61,7 @@ function renderFullUI() {
     ${renderSidebar(state.activeView)}
 
     <div class="main-wrapper">
-      ${renderHeader(state.activeView)}
+      ${renderHeader(state.activeView, state.data.cameras.length)}
       ${renderNotificationDrawer(state.data.alerts)}
 
       <main id="main-content-area">
@@ -85,23 +86,23 @@ function renderFullUI() {
 }
 
 function renderCurrentViewContent(currentTime) {
-  if (state.activeView.toLowerCase() === 'live monitoring' || state.activeView.toLowerCase() === 'live view') {
+  if (state.activeView === 'Live View') {
     return renderLiveViewScreen(state.data.cameras);
   }
-  if (state.activeView.toLowerCase() === 'events & alerts') {
+  if (state.activeView === 'Events & Alerts') {
     return renderEventsScreen(state.data.alerts);
   }
-  if (state.activeView.toLowerCase() === 'map overview' || state.activeView.toLowerCase() === 'map view') {
+  if (state.activeView === 'Map View') {
     return renderFullMapScreen();
   }
 
-  // Default Dashboard View (Exact match to screenshot)
+  // Default Dashboard View
   return `
     <div class="dashboard-content">
-      <!-- 1. Top 5 Metric Cards -->
+      <!-- 1. Top Stat Cards -->
       ${renderStatCards(state.data.stats)}
 
-      <!-- 2. Middle Grid: Live Surveillance + Recent Alerts -->
+      <!-- 2. Middle Row: Live Feeds & Right Rail -->
       <div class="middle-grid">
         <div id="surveillance-section">
           ${renderSurveillanceGrid(state.filteredCameras, currentTime)}
@@ -109,10 +110,11 @@ function renderCurrentViewContent(currentTime) {
 
         <div class="right-panel-column">
           ${renderAlertsPanel(state.data.alerts)}
+          ${renderMinimap()}
         </div>
       </div>
 
-      <!-- 3. Bottom Row: 4 Analytics Panels -->
+      <!-- 3. Bottom Row: Analytics Strip -->
       ${renderAnalyticsStrip(state.data.analytics)}
     </div>
   `;
@@ -124,13 +126,7 @@ function setupGlobalClock() {
     const timeStr = getFormattedTime();
     const clockElements = document.querySelectorAll('.live-clock-tick');
     clockElements.forEach(el => {
-      // Preserve inner red dot if present
-      const redDot = el.querySelector('.red-dot');
-      if (redDot) {
-        el.innerHTML = `<span class="red-dot"></span> ${timeStr}`;
-      } else {
-        el.textContent = timeStr;
-      }
+      el.textContent = timeStr;
     });
   }, 1000);
 }
@@ -143,16 +139,16 @@ function showToast(title, message, isCritical = false) {
   const toast = document.createElement('div');
   toast.className = `toast ${isCritical ? 'critical' : ''}`;
   toast.innerHTML = `
-    <div style="color: ${isCritical ? '#DC2626' : '#2563EB'};">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <div style="color: ${isCritical ? '#EF4444' : '#3B82F6'};">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="8" x2="12" y2="12"></line>
         <line x1="12" y1="16" x2="12.01" y2="16"></line>
       </svg>
     </div>
     <div style="display: flex; flex-direction: column;">
-      <span style="font-weight: 600; font-size: 12.5px; color: var(--text-primary);">${title}</span>
-      <span style="font-size: 11.5px; color: var(--text-secondary);">${message}</span>
+      <span style="font-weight: 600; font-size: 12px; color: var(--text-primary);">${title}</span>
+      <span style="font-size: 11px; color: var(--text-secondary);">${message}</span>
     </div>
   `;
 
@@ -179,36 +175,55 @@ function attachEventListeners() {
     });
   });
 
-  // Hamburger & Sidebar Toggle
-  const hamburgerBtn = document.getElementById('sidebar-hamburger-btn');
+  // Sidebar Collapse Toggle
   const sidebarToggle = document.getElementById('sidebar-toggle');
-  [hamburgerBtn, sidebarToggle].forEach(btn => {
-    if (btn) {
-      btn.addEventListener('click', () => {
-        const sidebar = document.getElementById('main-sidebar');
-        if (sidebar) {
-          state.sidebarCollapsed = !state.sidebarCollapsed;
-          sidebar.classList.toggle('collapsed', state.sidebarCollapsed);
-        }
-      });
-    }
-  });
-
-  // Location filter pill
-  const locPill = document.getElementById('header-location-pill');
-  if (locPill) {
-    locPill.addEventListener('click', () => {
-      playRadarBeep();
-      showToast('Location Filter', 'Currently monitoring: All BOP & Check Post Sectors');
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => {
+      const sidebar = document.getElementById('main-sidebar');
+      if (sidebar) {
+        state.sidebarCollapsed = !state.sidebarCollapsed;
+        sidebar.classList.toggle('collapsed', state.sidebarCollapsed);
+      }
     });
   }
 
-  // Date filter pill
-  const datePill = document.getElementById('header-date-pill');
-  if (datePill) {
-    datePill.addEventListener('click', () => {
+  // Camera Filter Select
+  const camFilter = document.getElementById('camera-filter-select');
+  if (camFilter) {
+    camFilter.addEventListener('change', (e) => {
+      const selected = e.target.value;
+      if (selected === 'all') {
+        state.filteredCameras = [...state.data.cameras];
+      } else {
+        state.filteredCameras = state.data.cameras.filter(c => c.id === selected);
+      }
       playRadarBeep();
-      showToast('Date Filter', 'Displaying live telemetry archive for: 25 May 2025');
+      const survSection = document.getElementById('surveillance-section');
+      if (survSection) {
+        survSection.innerHTML = renderSurveillanceGrid(state.filteredCameras, getFormattedTime());
+        bindCameraInteractions();
+      }
+    });
+  }
+
+  // Global Search Input
+  const searchInput = document.getElementById('global-search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      if (!query) {
+        state.filteredCameras = [...state.data.cameras];
+      } else {
+        state.filteredCameras = state.data.cameras.filter(c => 
+          c.name.toLowerCase().includes(query) || 
+          c.location.toLowerCase().includes(query)
+        );
+      }
+      const survSection = document.getElementById('surveillance-section');
+      if (survSection) {
+        survSection.innerHTML = renderSurveillanceGrid(state.filteredCameras, getFormattedTime());
+        bindCameraInteractions();
+      }
     });
   }
 
@@ -231,10 +246,21 @@ function attachEventListeners() {
     }
   });
 
-  // View All Alerts Link
+  // Audio Mute/Unmute Toggle
+  const audioBtn = document.getElementById('audio-toggle-btn');
+  if (audioBtn) {
+    audioBtn.addEventListener('click', () => {
+      const isEnabled = toggleSound();
+      showToast('Audio Telemetry', isEnabled ? 'Alert chimes ENABLED' : 'Alert chimes MUTED');
+      if (isEnabled) playRadarBeep();
+    });
+  }
+
+  // View All Alerts Links
   const viewAlertsLink = document.getElementById('btn-view-all-alerts');
   const viewActiveAlerts = document.getElementById('view-active-alerts-link');
-  [viewAlertsLink, viewActiveAlerts].forEach(el => {
+  const statViewAlerts = document.getElementById('stat-view-alerts');
+  [viewAlertsLink, viewActiveAlerts, statViewAlerts].forEach(el => {
     if (el) {
       el.addEventListener('click', () => {
         state.activeView = 'Events & Alerts';
@@ -245,14 +271,47 @@ function attachEventListeners() {
     }
   });
 
-  // Grid View button
-  const gridBtn = document.getElementById('btn-grid-view');
-  if (gridBtn) {
-    gridBtn.addEventListener('click', () => {
-      playRadarBeep();
-      showToast('Grid Mode', '2x2 Matrix Active - 4 Real-time Camera Feeds');
+  // Emergency Button Handler
+  const emergencyBtn = document.getElementById('btn-emergency-action');
+  if (emergencyBtn) {
+    emergencyBtn.addEventListener('click', () => {
+      playAlertTone();
+      showToast('PERIMETER LOCKDOWN INITIATED', 'Code Red triggered. Sector barriers engaging.', true);
     });
   }
+
+  // Header Fullscreen Button
+  const fsBtn = document.getElementById('header-fullscreen-btn');
+  if (fsBtn) {
+    fsBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+        showToast('Display Mode', 'Entered Fullscreen Mode');
+      } else {
+        document.exitFullscreen().catch(() => {});
+        showToast('Display Mode', 'Exited Fullscreen Mode');
+      }
+    });
+  }
+
+  // View Full Map Links & Minimap Controls
+  const viewMapLink = document.getElementById('btn-view-full-map');
+  const minimapViewport = document.getElementById('minimap-viewport');
+  if (viewMapLink) {
+    viewMapLink.addEventListener('click', () => {
+      state.activeView = 'Map View';
+      playRadarBeep();
+      renderFullUI();
+      attachEventListeners();
+    });
+  }
+
+  const zoomIn = document.getElementById('map-zoom-in');
+  const zoomOut = document.getElementById('map-zoom-out');
+  const recenter = document.getElementById('map-recenter');
+  if (zoomIn) zoomIn.addEventListener('click', (e) => { e.stopPropagation(); showToast('GIS Map', 'Zoom Level: 14x'); });
+  if (zoomOut) zoomOut.addEventListener('click', (e) => { e.stopPropagation(); showToast('GIS Map', 'Zoom Level: 10x'); });
+  if (recenter) recenter.addEventListener('click', (e) => { e.stopPropagation(); showToast('GIS Map', 'Centered on BOP Alpha'); });
 
   // Incident Modal Handlers
   bindAlertInteractions();
@@ -378,8 +437,8 @@ function bindCameraInteractions() {
     fullMatrixBtn.addEventListener('click', () => {
       const container = document.getElementById('camera-matrix-container');
       if (!document.fullscreenElement && container) {
-        container.requestFullscreen().catch(() => {
-          showToast('Fullscreen Mode', 'Expanded surveillance matrix mode engaged');
+        container.requestFullscreen().catch(err => {
+          showToast('Fullscreen Mode', 'Expanded surveillance mode engaged');
         });
       } else if (document.exitFullscreen) {
         document.exitFullscreen();
