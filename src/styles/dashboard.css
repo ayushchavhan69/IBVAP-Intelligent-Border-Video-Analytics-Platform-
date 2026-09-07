@@ -55,16 +55,22 @@
 }
 
 .brand-title {
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   letter-spacing: 0.05em;
-  color: var(--text-primary);
+  color: #FFFFFF;
   line-height: 1.15;
+}
+
+.brand-v-accent {
+  color: #22C55E;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.45);
 }
 
 .brand-subtitle {
   font-size: 9.5px;
-  color: var(--text-tertiary);
+  color: #8C9CAB;
   line-height: 1.25;
   margin-top: 2px;
   font-weight: 500;

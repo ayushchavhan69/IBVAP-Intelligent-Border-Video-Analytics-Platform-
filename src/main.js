@@ -69,7 +69,7 @@ function renderFullUI() {
       </main>
 
       <footer class="footer">
-        © 2025 IBVAP - Intelligent Border Video Analytics Platform. All rights reserved.
+        © 2025 IB<span style="color: #22C55E; font-weight: 700;">V</span>AP - Intelligent Border Video Analytics Platform. All rights reserved.
       </footer>
     </div>
 

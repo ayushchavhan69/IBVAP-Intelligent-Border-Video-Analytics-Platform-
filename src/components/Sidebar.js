@@ -78,7 +78,7 @@ export function renderSidebar(activeNav = 'Dashboard') {
         <div class="sidebar-brand">
           <img src="/assets/ibvap_logo.png" alt="IBVAP Shield" class="sidebar-brand-logo" />
           <div class="sidebar-brand-info">
-            <span class="brand-title">IBVAP</span>
+            <span class="brand-title">IB<span class="brand-v-accent">V</span>AP</span>
             <span class="brand-subtitle">Intelligent Border<br/>Video Analytics Platform</span>
           </div>
         </div>
