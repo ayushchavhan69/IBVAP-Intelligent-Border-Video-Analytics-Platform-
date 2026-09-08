@@ -122,7 +122,7 @@ function renderFullUI() {
     ${renderSidebar(state.activeView)}
 
     <div class="main-wrapper">
-      ${renderHeader(state.activeView, state.data.cameras.length)}
+      ${renderHeader(state.activeView, state.data.cameras.length, state.data.alerts.length)}
       ${renderNotificationDrawer(state.data.alerts)}
 
       <main id="main-content-area">
@@ -425,6 +425,42 @@ function bindAlertInteractions() {
   const alertItems = document.querySelectorAll('.alert-item, .notification-drawer-item');
   const incidentModal = document.getElementById('incident-modal-overlay');
   const closeBtn = document.getElementById('modal-close-btn');
+
+  // Notification Drawer Tabs (All, Warnings, ANPR & Intel)
+  const notifTabBtns = document.querySelectorAll('.notif-tab-btn');
+  notifTabBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      notifTabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const category = btn.getAttribute('data-tab');
+      const drawerItems = document.querySelectorAll('.notification-drawer-item');
+      drawerItems.forEach(item => {
+        const itemCat = item.getAttribute('data-category');
+        if (category === 'all' || itemCat === category) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      playRadarBeep();
+    });
+  });
+
+  // Drawer Footer View All
+  const drawerViewAll = document.getElementById('drawer-view-all-link');
+  if (drawerViewAll) {
+    drawerViewAll.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.notifDrawerOpen = false;
+      const drawer = document.getElementById('notification-drawer');
+      if (drawer) drawer.classList.remove('active');
+      state.activeView = 'Events & Alerts';
+      playRadarBeep();
+      renderFullUI();
+      attachEventListeners();
+    });
+  }
 
   alertItems.forEach(item => {
     item.addEventListener('click', () => {

@@ -98,39 +98,76 @@ export const initialSurveillanceData = {
       location: 'BOP Alpha - East Fence',
       time: '11:28:31 AM',
       type: 'critical',
-      thumbnail: '/assets/alert1.jpg',
-      details: 'Automated tripwire breach detected. Unidentified male individual approached security perimeter fence from zero line. Track duration: 14s.',
+      severityTag: 'CRITICAL BREACH',
+      thumbnail: '/assets/alerts/alert_fence_breach.jpg',
+      details: 'Automated tripwire breach detected. Unidentified subject entered perimeter restricted zone from zero line boundary. Ground contact confirmed. Track duration: 18s.',
       actionTaken: 'Pending Operator Triage'
     },
     {
       id: 'alert-2',
-      title: 'Unknown Face Detected',
+      title: 'ANPR Hotlist Intercept',
       location: 'Check Post - Road 32',
-      time: '11:26:18 AM',
-      type: 'high',
-      thumbnail: '/assets/alert2.jpg',
-      details: 'Facial recognition model captured biometric signature with zero match in local resident or authorized personnel database.',
-      actionTaken: 'Flagged for Gate Inspection'
+      time: '11:26:40 AM',
+      type: 'intel',
+      severityTag: 'STOLEN VEHICLE',
+      thumbnail: '/assets/alerts/alert_anpr_intercept.jpg',
+      details: 'Registration PB10MF1234 identified via HSRP OCR scanner. Matched National Hotlist database (Tag: Stolen / Contraband Transport). Automated barrier lock deployed.',
+      actionTaken: 'Barrier Lock Engaged'
     },
     {
       id: 'alert-3',
-      title: 'ANPR Hit - Watchlist',
-      location: 'PB10MF1234',
-      time: '11:24:02 AM',
-      type: 'intel',
-      thumbnail: '/assets/alert3.jpg',
-      details: 'Vehicle Registration PB10MF1234 matched National Border Intercept Watchlist for suspected cross-border contraband logistics.',
-      actionTaken: 'Checkpost barrier lock engaged'
+      title: 'Biometric Watchlist Match',
+      location: 'Check Post - Pedestrian Gate',
+      time: '11:24:18 AM',
+      type: 'critical',
+      severityTag: 'SUSPECT IDENTIFIED',
+      thumbnail: '/assets/alerts/alert_face_suspect.jpg',
+      details: 'Biometric face recognition engine matched facial signature against Watchlist Database (Target Alpha / WLIST-SUS-991, 94% cosine similarity).',
+      actionTaken: 'Flagged for Immediate Detainment'
     },
     {
       id: 'alert-4',
-      title: 'Loitering Detected',
-      location: 'Border Road - Sector 7',
-      time: '11:22:47 AM',
+      title: 'Thermal IR Perimeter Anomaly',
+      location: 'Zero Line Corridor - Culvert 14',
+      time: '11:22:05 AM',
+      type: 'high',
+      severityTag: 'THERMAL BREACH',
+      thumbnail: '/assets/alerts/alert_thermal_breach.jpg',
+      details: 'Long-wave infrared thermal sensor detected human heat signature moving through unlit ditch along zero line perimeter fence.',
+      actionTaken: 'Floodlight Array Engaged'
+    },
+    {
+      id: 'alert-5',
+      title: 'Restricted Lane Loitering',
+      location: 'Sector 7 - Military Supply Corridor',
+      time: '11:19:50 AM',
       type: 'medium',
-      thumbnail: '/assets/alert4.jpg',
-      details: 'Two subjects observed stationary within 15 meters of military supply lane for over 180 seconds without assigned permit.',
-      actionTaken: 'Auditory warning broadcast'
+      severityTag: 'LOITERING > 180s',
+      thumbnail: '/assets/alerts/alert_corridor_loitering.jpg',
+      details: 'Vehicle stationary within restricted military transit lane for 184 seconds without assigned security manifest or transit clearance.',
+      actionTaken: 'Auditory Broadcast Dispatched'
+    },
+    {
+      id: 'alert-6',
+      title: 'Hotlist Carrier Intercept',
+      location: 'Check Post 32 - Lane 2',
+      time: '11:15:12 AM',
+      type: 'intel',
+      severityTag: 'WANTED TRUCK',
+      thumbnail: '/assets/alerts/alert_hotlist_mh12.jpg',
+      details: 'Plate MH12AB5678 flagged for unauthorized border transit and contraband transport. Automated barrier engaged.',
+      actionTaken: 'QRF Intercept Unit Dispatched'
+    },
+    {
+      id: 'alert-7',
+      title: 'Gate Access Badge Anomaly',
+      location: 'BOP Alpha - Main Gate',
+      time: '11:10:30 AM',
+      type: 'high',
+      severityTag: 'ACCESS VIOLATION',
+      thumbnail: '/assets/alerts/alert_gate_unauthorized.jpg',
+      details: 'Individual attempted entry through turnstile without valid RFID badge or tactical clearance credentials.',
+      actionTaken: 'Turnstile Interlock Activated'
     }
   ],
 

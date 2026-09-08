@@ -2,35 +2,72 @@ export function renderNotificationDrawer(alerts) {
   return `
     <div class="notification-drawer" id="notification-drawer">
       <div class="notification-drawer-header">
-        <span>Active Alerts (12)</span>
-        <span class="badge badge-alert">7 UNACKNOWLEDGED</span>
+        <div class="notif-header-title-row">
+          <div class="notif-title-badge">
+            <span class="pulse-dot red"></span>
+            <span>Operational Warnings & Alerts</span>
+          </div>
+          <span class="badge badge-alert" id="notif-count-badge">${alerts.length} ACTIVE</span>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="notif-tabs-bar">
+          <button class="notif-tab-btn active" data-tab="all">All (${alerts.length})</button>
+          <button class="notif-tab-btn" data-tab="warnings">Warnings (4)</button>
+          <button class="notif-tab-btn" data-tab="intel">ANPR & Intel (3)</button>
+        </div>
       </div>
 
-      <div class="notification-drawer-list">
+      <div class="notification-drawer-list" id="notif-drawer-list">
         ${alerts.map(alert => `
-          <div class="notification-drawer-item" data-notif-id="${alert.id}">
-            <div class="alert-icon-box ${alert.type === 'critical' ? 'red' : alert.type === 'high' ? 'orange' : alert.type === 'intel' ? 'purple' : 'amber'}" style="width: 24px; height: 24px;">
-              ${getIcon(alert.type)}
+          <div 
+            class="notification-drawer-item ${alert.type}" 
+            data-notif-id="${alert.id}"
+            data-category="${alert.type === 'intel' ? 'intel' : 'warnings'}"
+          >
+            <!-- Real Evidence Thumbnail Preview -->
+            <div class="notif-thumb-wrapper">
+              <img 
+                src="${alert.thumbnail}" 
+                alt="${alert.title}" 
+                class="notif-thumb-img" 
+                onerror="this.onerror=null;this.src='/assets/alert1.jpg'"
+              />
+              <span class="notif-tag-overlay ${alert.type}">
+                ${alert.severityTag || alert.type.toUpperCase()}
+              </span>
             </div>
-            <div style="flex: 1; display: flex; flex-direction: column;">
-              <span style="font-weight: 600; color: var(--text-primary);">${alert.title}</span>
-              <span style="font-size: 11px; color: var(--text-secondary);">${alert.location}</span>
-              <span style="font-size: 10px; font-family: var(--font-mono); color: var(--text-tertiary);">${alert.time}</span>
+
+            <!-- Warning Information Block -->
+            <div class="notif-info-block">
+              <div class="notif-row-top">
+                <span class="notif-item-title">${alert.title}</span>
+                <span class="notif-item-time">${alert.time}</span>
+              </div>
+              
+              <div class="notif-location-row">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span>${alert.location}</span>
+              </div>
+
+              <p class="notif-details-text">${alert.details || 'Surveillance anomaly recorded by automated sensor network.'}</p>
+
+              <div class="notif-action-status">
+                <span class="notif-status-dot"></span>
+                <span>Action: ${alert.actionTaken || 'Pending Operator Review'}</span>
+              </div>
             </div>
           </div>
         `).join('')}
       </div>
 
       <div class="notification-drawer-footer" id="drawer-view-all-link">
-        Open Full Incident Triage Center →
+        <span>Open Full Incident Triage Center →</span>
       </div>
     </div>
   `;
 }
 
-function getIcon(type) {
-  if (type === 'critical') {
-    return `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>`;
-  }
-  return `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
-}
