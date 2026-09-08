@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In - IBVAP | Intelligent Border Video Analytics Platform</title>
+  <meta name="description" content="Secure authentication portal for IBVAP. Authorized personnel only." />
+  <link rel="icon" type="image/png" href="/assets/ibvap_logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Sans+Gurmukhi:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/signin.css" />
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="toast" id="toast" role="alert" aria-live="polite">
+  <div id="toast-icon"></div>
+  <div class="toast-body">
+    <div class="toast-title" id="toast-title"></div>
+    <div class="toast-msg" id="toast-msg"></div>
+  </div>
+</div>
+
+<div class="signin-page">
+  <!-- ── LEFT PANEL ── -->
+  <div class="left-panel">
+    <div class="left-panel__bg"></div>
+    <div class="left-panel__content">
+      <div class="brand-header">
+        <img src="/assets/ibvap_logo.png?v=2" alt="IBVAP Logo" class="brand-logo" />
+        <div class="brand-text">
+          <div class="brand-name">IBVAP</div>
+          <div class="brand-tagline" id="brandTagline">INTELLIGENT BORDER<br />VIDEO ANALYTICS PLATFORM</div>
+        </div>
+      </div>
+
+      <div class="hero-block">
+        <h2 class="hero-headline" id="heroHeadline">Smarter <span class="accent-blue">Surveillance.</span><br />Stronger <span class="accent-blue">Borders.</span></h2>
+        <p class="hero-sub" id="heroSub">AI-powered video analytics transforming existing CCTV into an intelligent surveillance network.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT PANEL (FLOATING CARD) ── -->
+  <div class="right-panel">
+    <div class="signin-card">
+      <!-- Top Language Selector -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-pill" id="langPill" aria-haspopup="listbox" aria-expanded="false" aria-label="Select Language">
+          <svg class="lang-globe" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span class="lang-text" id="currentLang">English</span>
+          <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="listbox">
+          <div class="lang-option active" data-lang="en" role="option" aria-selected="true" tabindex="0">
+            <span class="lang-opt-name">English</span>
+            <svg class="lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="lang-option" data-lang="hi" role="option" aria-selected="false" tabindex="0">
+            <span class="lang-opt-name">हिंदी (Hindi)</span>
+            <svg class="lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="lang-option" data-lang="mr" role="option" aria-selected="false" tabindex="0">
+            <span class="lang-opt-name">मराठी (Marathi)</span>
+            <svg class="lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="lang-option" data-lang="ur" role="option" aria-selected="false" tabindex="0">
+            <span class="lang-opt-name">اردو (Urdu)</span>
+            <svg class="lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="lang-option" data-lang="bn" role="option" aria-selected="false" tabindex="0">
+            <span class="lang-opt-name">বাংলা (Bengali)</span>
+            <svg class="lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="lang-option" data-lang="pa" role="option" aria-selected="false" tabindex="0">
+            <span class="lang-opt-name">ਪੰਜਾਬੀ (Punjabi)</span>
+            <svg class="lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D Shield with Glowing Blue Orbital Ring -->
+      <div class="shield-container">
+        <img src="/assets/signin_shield_3d.png" alt="IBVAP 3D Shield" class="shield-img-3d" />
+      </div>
+
+      <!-- Heading -->
+      <div class="signin-heading">
+        <h1 id="signinTitle">Welcome <span class="accent-blue">Back!</span></h1>
+        <p id="signinSub">Sign in to continue to IBVAP</p>
+      </div>
+
+      <!-- Sign In Form (Inputs without top labels, matching reference) -->
+      <form class="signin-form" id="signinForm" novalidate>
+        <div class="field-wrap">
+          <div class="field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+          </div>
+          <input class="field-input" id="userId" type="email" autocomplete="off" value="" placeholder="Authorized Gmail Address" required />
+          <div class="field-error" id="userId-error">Please enter an authorized Gmail address.</div>
+        </div>
+
+        <div class="field-wrap">
+          <div class="field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <input class="field-input" id="password" type="password" autocomplete="new-password" value="" placeholder="Password" required />
+          <button type="button" class="field-toggle" id="togglePassword" aria-label="Toggle password visibility">
+            <svg id="eye-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+          <div class="field-error" id="password-error">Password must be at least 8 characters.</div>
+        </div>
+
+        <div class="form-row">
+          <label class="checkbox-wrap" for="rememberMe">
+            <input type="checkbox" id="rememberMe" />
+            <div class="custom-checkbox"></div>
+            <span class="checkbox-label" id="rememberLabel">Remember me</span>
+          </label>
+          <a href="#" class="forgot-link" id="forgotLink">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span class="btn-label">
+            <span id="submitBtnText">Sign In</span>
+            <span class="btn-arrow-circle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </span>
+          </span>
+          <div class="spinner"></div>
+        </button>
+      </form>
+
+      <div class="register-row">
+        <span id="noAccountText">Don't have an account?</span>
+        <a href="mailto:ayushchavhan79@gmail.com?subject=IBVAP%20System%20Access%20Request" id="contactAdmin" title="Contact Administrator (ayushchavhan79@gmail.com)">Contact Admin</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ACCOUNT RECOVERY (FORGOT PASSWORD) MODAL ── -->
+<div class="recovery-modal-overlay" id="recoveryModal" role="dialog" aria-modal="true" aria-labelledby="recoveryTitle">
+  <div class="recovery-card">
+    <button type="button" class="recovery-close" id="recoveryCloseBtn" aria-label="Close dialog">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Tactical Top Classification Badge -->
+    <div class="recovery-badge-top">
+      <span class="security-radar-dot"></span>
+      <span class="security-radar-text">BSF SECURE RECOVERY PROTOCOL • AES-256</span>
+    </div>
+
+    <!-- Modal Header -->
+    <div class="recovery-header">
+      <div class="recovery-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <path d="M12 8v4"></path>
+          <path d="M12 16h.01"></path>
+        </svg>
+      </div>
+      <div class="recovery-header-text">
+        <h2 class="recovery-title" id="recoveryTitle">Account Recovery</h2>
+        <p class="recovery-desc" id="recoveryDesc">Verify authorized operator credentials to reset password</p>
+      </div>
+    </div>
+
+    <!-- Stepper Indicator -->
+    <div class="recovery-stepper">
+      <div class="step-badge active" id="stepBadge1">1. Identify</div>
+      <div class="step-connector"></div>
+      <div class="step-badge" id="stepBadge2">2. Verify OTP</div>
+      <div class="step-connector"></div>
+      <div class="step-badge" id="stepBadge3">3. New Password</div>
+    </div>
+
+    <!-- STEP 1: Enter Authorized Email -->
+    <div class="recovery-step-panel active" id="recoveryStep1">
+      <p class="step-instruction" id="step1Prompt">Enter your registered operator Gmail address to request a security verification code.</p>
+      <div class="recovery-field">
+        <label class="recovery-label" id="step1EmailLabel" for="recoveryEmail">Authorized Gmail Address</label>
+        <div class="recovery-input-wrap">
+          <div class="field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+          </div>
+          <input type="email" class="recovery-input" id="recoveryEmail" placeholder="operator@bsf.gov.in" autocomplete="off" />
+        </div>
+        <div class="recovery-error" id="recoveryEmailError"></div>
+      </div>
+      <button type="button" class="btn-recovery-primary" id="sendOtpBtn">
+        <span class="btn-text" id="sendOtpBtnText">Send Verification Code</span>
+        <span class="btn-arrow-circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </span>
+        <div class="spinner"></div>
+      </button>
+    </div>
+
+    <!-- STEP 2: Verify 6-digit OTP -->
+    <div class="recovery-step-panel" id="recoveryStep2">
+      <div class="otp-notice-box">
+        <div class="otp-notice-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <polyline points="9 12 11 14 15 10"></polyline>
+          </svg>
+        </div>
+        <div class="otp-notice-content">
+          <span class="otp-notice-title" id="otpNoticeTitle">Security Code Dispatched via Email</span>
+          <span class="otp-notice-text" id="otpNoticeText">A 6-digit one-time verification code has been dispatched to your authorized email address:</span>
+          <div class="otp-dispatched-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <span id="dispatchedEmailTarget">operator@gmail.com</span>
+          </div>
+          <span class="otp-notice-hint" id="otpNoticeHint">Please check your Gmail inbox (and Spam/Junk folder), then enter the code below.</span>
+        </div>
+      </div>
+
+      <div class="recovery-field">
+        <label class="recovery-label" id="step2OtpLabel" for="recoveryOtpInput">Enter 6-Digit OTP</label>
+        <div class="recovery-input-wrap">
+          <div class="field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 2l-2 2m-1-1l2 2M15 8l-3 3m1-1l3 3M3 21l6-6m1 1l-6 6"></path>
+              <circle cx="7.5" cy="16.5" r="4.5"></circle>
+            </svg>
+          </div>
+          <input type="text" maxlength="6" class="recovery-input recovery-input--otp" id="recoveryOtpInput" placeholder="● ● ● ● ● ●" autocomplete="one-time-code" />
+        </div>
+        <div class="recovery-error" id="recoveryOtpError"></div>
+      </div>
+
+      <div class="recovery-row-actions">
+        <span class="otp-timer-text" id="otpTimerText">
+          <span class="timer-dot"></span>
+          Code expires in <span id="otpCountdown">60</span>s
+        </span>
+        <button type="button" class="btn-resend" id="resendOtpBtn" disabled>Resend Code</button>
+      </div>
+
+      <div class="recovery-btn-group">
+        <button type="button" class="btn-recovery-secondary" id="backToStep1Btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Back
+        </button>
+        <button type="button" class="btn-recovery-primary" id="verifyOtpBtn">
+          <span class="btn-text" id="verifyOtpBtnText">Verify Code</span>
+          <span class="btn-arrow-circle">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </span>
+          <div class="spinner"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Enter New Password -->
+    <div class="recovery-step-panel" id="recoveryStep3">
+      <p class="step-instruction" id="step3Prompt">Create a strong new password for your operator account.</p>
+
+      <div class="recovery-field">
+        <label class="recovery-label" id="step3NewPassLabel" for="recoveryNewPass">New Password</label>
+        <div class="recovery-input-wrap">
+          <div class="field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <input type="password" class="recovery-input" id="recoveryNewPass" placeholder="Enter new password" autocomplete="new-password" />
+          <button type="button" class="field-toggle recovery-toggle" id="toggleNewPass" aria-label="Toggle password visibility">
+            <svg id="eyeNewPass" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
+        <div class="pass-strength-meter" id="passStrengthMeter">
+          <div class="strength-bars">
+            <div class="strength-bar" id="strengthBar1"></div>
+            <div class="strength-bar" id="strengthBar2"></div>
+            <div class="strength-bar" id="strengthBar3"></div>
+            <div class="strength-bar" id="strengthBar4"></div>
+          </div>
+          <span class="strength-label" id="strengthLabel">STRENGTH: —</span>
+        </div>
+      </div>
+
+      <div class="recovery-field">
+        <label class="recovery-label" id="step3ConfirmPassLabel" for="recoveryConfirmPass">Confirm New Password</label>
+        <div class="recovery-input-wrap">
+          <div class="field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <input type="password" class="recovery-input" id="recoveryConfirmPass" placeholder="Re-enter new password" autocomplete="new-password" />
+          <button type="button" class="field-toggle recovery-toggle" id="toggleConfirmPass" aria-label="Toggle password visibility">
+            <svg id="eyeConfirmPass" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
+        <div class="recovery-error" id="recoveryPassError"></div>
+      </div>
+
+      <button type="button" class="btn-recovery-primary" id="saveNewPassBtn">
+        <span class="btn-text" id="saveNewPassBtnText">Save & Encrypt New Password</span>
+        <span class="btn-arrow-circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </span>
+        <div class="spinner"></div>
+      </button>
+    </div>
+
+    <!-- STEP 4: Success Confirmation -->
+    <div class="recovery-step-panel" id="recoveryStep4">
+      <div class="recovery-success-box">
+        <div class="success-icon-badge">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <polyline points="9 12 11 14 15 10"></polyline>
+          </svg>
+        </div>
+        <div class="success-clearance-pill">
+          <span class="pulse-dot-emerald"></span>
+          <span>CLEARANCE VERIFIED • AES-256 RE-ENCRYPTED</span>
+        </div>
+        <h3 class="success-headline" id="recoverySuccessTitle">Password Reset Complete!</h3>
+        <p class="success-subtext" id="recoverySuccessDesc">Your new password has been hashed with SHA-256 and encrypted into the secure AES-256-GCM credentials vault. You can now sign in immediately.</p>
+        <button type="button" class="btn-recovery-primary" id="returnToLoginBtn">
+          <span class="btn-text" id="returnToLoginBtnText">Sign In With New Password</span>
+          <span class="btn-arrow-circle">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/src/signin.js"></script>
+</body>
+</html>
