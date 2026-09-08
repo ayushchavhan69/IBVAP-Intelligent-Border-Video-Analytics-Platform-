@@ -5,7 +5,7 @@ import './styles/modals.css';
 
 import { initialSurveillanceData } from './data/surveillanceData.js';
 import { renderSidebar } from './components/Sidebar.js';
-import { renderHeader } from './components/Header.js';
+import { renderHeader, getActiveOperator } from './components/Header.js';
 import { renderStatCards } from './components/StatCards.js';
 import { renderSurveillanceGrid } from './components/SurveillanceGrid.js';
 import { renderAlertsPanel } from './components/AlertsPanel.js';
@@ -246,6 +246,46 @@ function attachEventListeners() {
     }
   });
 
+  // Operator Profile Pill Dropdown Toggle
+  const operatorPill = document.getElementById('operator-profile-pill');
+  const operatorDropdown = document.getElementById('operator-dropdown-menu');
+  if (operatorPill && operatorDropdown) {
+    operatorPill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = operatorDropdown.classList.toggle('active');
+      operatorPill.classList.toggle('active', isOpen);
+      operatorPill.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (isOpen) playRadarBeep();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (operatorDropdown.classList.contains('active') && !operatorPill.contains(e.target)) {
+        operatorDropdown.classList.remove('active');
+        operatorPill.classList.remove('active');
+        operatorPill.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && operatorDropdown.classList.contains('active')) {
+        operatorDropdown.classList.remove('active');
+        operatorPill.classList.remove('active');
+        operatorPill.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // Operator Sign Out / Switch Session
+  const signoutBtn = document.getElementById('operator-signout-btn');
+  if (signoutBtn) {
+    signoutBtn.addEventListener('click', () => {
+      try {
+        localStorage.removeItem('ibvap_session');
+        localStorage.removeItem('ibvap_active_operator');
+      } catch (e) { }
+    });
+  }
+
   // Audio Mute/Unmute Toggle
   const audioBtn = document.getElementById('audio-toggle-btn');
   if (audioBtn) {
@@ -367,7 +407,8 @@ function bindAlertInteractions() {
   const ackBtn = document.getElementById('btn-ack-alert');
   if (ackBtn) {
     ackBtn.addEventListener('click', () => {
-      showToast('Incident Acknowledged', 'Logged in audit registry by Operator at BOP Alpha');
+      const op = getActiveOperator();
+      showToast('Incident Acknowledged', `Logged in audit registry by ${op.name} (${op.unit})`);
       playRadarBeep();
       if (incidentModal) incidentModal.classList.remove('active');
     });

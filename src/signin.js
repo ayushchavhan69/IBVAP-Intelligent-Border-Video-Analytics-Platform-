@@ -137,6 +137,14 @@ async function saveOperatorSession(email, role = 'OPERATOR', name = 'Operator') 
   });
   const encrypted = await encryptData(sessionData);
   localStorage.setItem('ibvap_session', encrypted);
+  try {
+    localStorage.setItem('ibvap_active_operator', JSON.stringify({
+      name: name,
+      email: email,
+      role: role === 'COMMANDER' ? 'Command Officer' : role,
+      unit: 'BOP Alpha'
+    }));
+  } catch (e) { }
 }
 
 async function loadOperatorSession() {
