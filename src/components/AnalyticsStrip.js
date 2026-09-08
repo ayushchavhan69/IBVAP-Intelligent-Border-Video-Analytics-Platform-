@@ -1,34 +1,55 @@
 export function renderAnalyticsStrip(analytics) {
+  const donutData = analytics.donut || {
+    total: '1,844',
+    items: [
+      { label: 'Intrusion', count: '652', pct: '35%', color: '#EF4444' },
+      { label: 'Vehicle', count: '542', pct: '29%', color: '#3B82F6' },
+      { label: 'Loitering', count: '362', pct: '20%', color: '#F97316' },
+      { label: 'ANPR', count: '128', pct: '7%', color: '#A855F7' },
+      { label: 'Other', count: '160', pct: '9%', color: '#06B6D4' }
+    ]
+  };
+
+  const donutItems = Array.isArray(donutData) ? donutData : donutData.items;
+  const donutTotal = donutData.total || '1,844';
+
   return `
     <div class="bottom-analytics-grid">
       <!-- 1. Events by Type (Today) -->
       <div class="analytics-panel">
-        <span class="analytics-panel-title">Events by Type (Today)</span>
+        <span class="analytics-panel-title">Events by Type <span class="title-sub">(Today)</span></span>
         <div class="donut-container">
           <div class="donut-svg-wrapper">
-            <svg viewBox="0 0 42 42" class="donut-svg" width="86" height="86">
+            <svg viewBox="0 0 42 42" class="donut-svg" width="94" height="94">
               <!-- Background Ring -->
-              <circle class="donut-ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#172238" stroke-width="6"></circle>
+              <circle class="donut-ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#131d31" stroke-width="5.5"></circle>
               
-              <!-- Human 45% (offset 0) -->
-              <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#3B82F6" stroke-width="6" stroke-dasharray="45 55" stroke-dashoffset="25"></circle>
+              <!-- Intrusion 35% (starts at top, dashoffset 25) -->
+              <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#EF4444" stroke-width="5.5" stroke-dasharray="35 65" stroke-dashoffset="25"></circle>
 
-              <!-- Vehicle 25% (offset 45) -->
-              <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#10B981" stroke-width="6" stroke-dasharray="25 75" stroke-dashoffset="80"></circle>
+              <!-- Vehicle 29% (offset 25 - 35 = -10 = 90) -->
+              <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#3B82F6" stroke-width="5.5" stroke-dasharray="29 71" stroke-dashoffset="90"></circle>
 
-              <!-- Intrusion 16% (offset 70) -->
-              <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#EF4444" stroke-width="6" stroke-dasharray="16 84" stroke-dashoffset="55"></circle>
+              <!-- Loitering 20% (offset 90 - 29 = 61) -->
+              <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F97316" stroke-width="5.5" stroke-dasharray="20 80" stroke-dashoffset="61"></circle>
 
-              <!-- ANPR 14% (offset 86) -->
-              <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#A855F7" stroke-width="6" stroke-dasharray="14 86" stroke-dashoffset="39"></circle>
+              <!-- ANPR 7% (offset 61 - 20 = 41) -->
+              <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#A855F7" stroke-width="5.5" stroke-dasharray="7 93" stroke-dashoffset="41"></circle>
+
+              <!-- Other 9% (offset 41 - 7 = 34) -->
+              <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#06B6D4" stroke-width="5.5" stroke-dasharray="9 91" stroke-dashoffset="34"></circle>
             </svg>
+            <div class="donut-center-info">
+              <span class="donut-total-val">${donutTotal}</span>
+              <span class="donut-total-lbl">Total</span>
+            </div>
           </div>
 
           <div class="donut-legend">
-            ${analytics.donut.map(item => `
+            ${donutItems.map(item => `
               <div class="legend-item">
                 <span class="legend-color-dot" style="background: ${item.color};"></span>
-                <span>${item.label}</span>
+                <span class="legend-name">${item.label}</span>
                 <span class="legend-bold">${item.count} (${item.pct})</span>
               </div>
             `).join('')}
@@ -38,10 +59,10 @@ export function renderAnalyticsStrip(analytics) {
 
       <!-- 2. Events Over Time (Today) -->
       <div class="analytics-panel">
-        <span class="analytics-panel-title">Events Over Time (Today)</span>
+        <span class="analytics-panel-title">Events Over Time <span class="title-sub">(Today)</span></span>
         <div class="area-chart-container">
-          <div style="display: flex; gap: 8px; flex: 1; align-items: flex-end;">
-            <div style="display: flex; flex-direction: column; justify-content: space-between; height: 75px; font-size: 9px; font-family: var(--font-mono); color: var(--text-tertiary); text-align: right; padding-right: 4px;">
+          <div style="display: flex; gap: 8px; flex: 1; align-items: flex-end; position: relative;">
+            <div style="display: flex; flex-direction: column; justify-content: space-between; height: 75px; font-size: 9px; font-family: var(--font-mono); color: var(--text-tertiary); text-align: right; padding-right: 4px; line-height: 1;">
               <span>200</span>
               <span>150</span>
               <span>100</span>
@@ -49,12 +70,17 @@ export function renderAnalyticsStrip(analytics) {
               <span>0</span>
             </div>
 
-            <div class="chart-svg-container" style="flex: 1;">
+            <div class="chart-svg-container" style="flex: 1; position: relative;">
+              <!-- Peak Callout Badge -->
+              <div class="chart-peak-badge" style="position: absolute; top: -12px; left: 56%; transform: translateX(-50%); background: #111C30; border: 1px solid #06B6D4; color: #22D3EE; font-size: 9.5px; font-weight: 700; font-family: var(--font-mono); padding: 1px 6px; border-radius: 4px; box-shadow: 0 0 8px rgba(6, 182, 212, 0.4); z-index: 5;">
+                158
+              </div>
+
               <svg viewBox="0 0 500 120" preserveAspectRatio="none" style="width: 100%; height: 75px; overflow: visible;">
                 <defs>
                   <linearGradient id="area-grad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.45" />
-                    <stop offset="100%" stop-color="#3B82F6" stop-opacity="0.0" />
+                    <stop offset="0%" stop-color="#06B6D4" stop-opacity="0.38" />
+                    <stop offset="100%" stop-color="#06B6D4" stop-opacity="0.0" />
                   </linearGradient>
                 </defs>
 
@@ -66,21 +92,21 @@ export function renderAnalyticsStrip(analytics) {
 
                 <!-- Filled Area -->
                 <path 
-                  d="M0,110 L0,100 Q40,95 80,75 T160,50 T240,40 T270,18 T310,25 T350,60 T400,65 T450,90 T500,105 L500,110 Z" 
+                  d="M0,110 L0,95 Q40,90 70,72 T140,58 T210,48 T280,16 T340,32 T400,60 T450,78 T500,98 L500,110 Z" 
                   fill="url(#area-grad)" 
                 />
 
                 <!-- Stroke Line -->
                 <path 
-                  d="M0,100 Q40,95 80,75 T160,50 T240,40 T270,18 T310,25 T350,60 T400,65 T450,90 T500,105" 
+                  d="M0,95 Q40,90 70,72 T140,58 T210,48 T280,16 T340,32 T400,60 T450,78 T500,98" 
                   fill="none" 
-                  stroke="#38BDF8" 
-                  stroke-width="2.5"
-                  filter="drop-shadow(0 0 6px #0284c7)"
+                  stroke="#22D3EE" 
+                  stroke-width="2.2"
+                  filter="drop-shadow(0 0 6px rgba(6, 182, 212, 0.6))"
                 />
 
                 <!-- Peak dot -->
-                <circle cx="270" cy="18" r="3.5" fill="#38BDF8" stroke="#FFFFFF" stroke-width="1.5" />
+                <circle cx="280" cy="16" r="3.5" fill="#22D3EE" stroke="#FFFFFF" stroke-width="1.5" />
               </svg>
             </div>
           </div>
@@ -97,9 +123,9 @@ export function renderAnalyticsStrip(analytics) {
         </div>
       </div>
 
-      <!-- 3. Top Cameras by Activity -->
+      <!-- 3. Top Cameras by Activity (Today) -->
       <div class="analytics-panel">
-        <span class="analytics-panel-title">Top Cameras by Activity</span>
+        <span class="analytics-panel-title">Top Cameras by Activity <span class="title-sub">(Today)</span></span>
         <div class="camera-activity-list">
           ${analytics.topCameras.map(cam => `
             <div class="cam-activity-row">
@@ -117,58 +143,79 @@ export function renderAnalyticsStrip(analytics) {
       <div class="analytics-panel">
         <span class="analytics-panel-title">System Health</span>
         
-        <div class="health-status-header">
-          <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            <polyline points="9 12 11 14 15 10"></polyline>
-          </svg>
-          <span class="health-status-text">All Systems Operational</span>
-        </div>
-
-        <div class="health-metrics-grid">
-          <!-- Cameras -->
-          <div class="health-metric-box">
-            <svg class="health-metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="23 7 16 12 23 17 23 7"></polygon>
-              <rect width="14" height="12" x="1" y="6" rx="2"></rect>
+        <div class="health-overview-layout">
+          <!-- Circular Health Gauge Ring -->
+          <div class="health-gauge-ring-container">
+            <svg viewBox="0 0 100 100" class="health-ring-svg">
+              <!-- Background Ring -->
+              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#131d31" stroke-width="7" />
+              <!-- Green Progress Arc (98%) -->
+              <circle 
+                cx="50" 
+                cy="50" 
+                r="40" 
+                fill="transparent" 
+                stroke="#10B981" 
+                stroke-width="7" 
+                stroke-dasharray="251.2" 
+                stroke-dashoffset="5" 
+                stroke-linecap="round"
+                transform="rotate(-90 50 50)"
+                style="filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.4));"
+              />
             </svg>
-            <span class="health-metric-name">Cameras</span>
-            <span class="health-metric-pct">98%</span>
+            <div class="health-gauge-center">
+              <span class="health-gauge-percent">98%</span>
+              <span class="health-gauge-label">Healthy</span>
+            </div>
           </div>
 
-          <!-- AI Engine -->
-          <div class="health-metric-box">
-            <svg class="health-metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect width="18" height="18" x="3" y="3" rx="2"></rect>
-              <path d="M9 9h6v6H9z"></path>
-              <path d="M9 1v2m6-2v2m-6 18v2m6-2v2M1 9h2m-2 6h2m18-6h2m-2 6h2"></path>
-            </svg>
-            <span class="health-metric-name">AI Engine</span>
-            <span class="health-metric-pct">99%</span>
-          </div>
+          <!-- Subsystems List -->
+          <div class="health-subsystems-list">
+            <div class="health-subsystem-item">
+              <div class="health-subsystem-left">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="health-sub-icon">
+                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                  <rect width="14" height="12" x="1" y="6" rx="2"></rect>
+                </svg>
+                <span class="health-sub-name">Cameras</span>
+              </div>
+              <span class="health-sub-val">98%</span>
+            </div>
 
-          <!-- Storage -->
-          <div class="health-metric-box">
-            <svg class="health-metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 6h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"></path>
-              <path d="M4 14h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2z"></path>
-              <line x1="6" y1="9" x2="6.01" y2="9"></line>
-              <line x1="6" y1="17" x2="6.01" y2="17"></line>
-            </svg>
-            <span class="health-metric-name">Storage</span>
-            <span class="health-metric-pct">92%</span>
-          </div>
+            <div class="health-subsystem-item">
+              <div class="health-subsystem-left">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="health-sub-icon">
+                  <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                  <path d="M9 9h6v6H9z"></path>
+                </svg>
+                <span class="health-sub-name">AI Engine</span>
+              </div>
+              <span class="health-sub-val">99%</span>
+            </div>
 
-          <!-- Network -->
-          <div class="health-metric-box">
-            <svg class="health-metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 20h.01"></path>
-              <path d="M8.5 16.429a5 5 0 0 1 7 0"></path>
-              <path d="M5 12.859a10 10 0 0 1 14 0"></path>
-              <path d="M1.5 9.288a15 15 0 0 1 21 0"></path>
-            </svg>
-            <span class="health-metric-name">Network</span>
-            <span class="health-metric-pct">97%</span>
+            <div class="health-subsystem-item">
+              <div class="health-subsystem-left">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="health-sub-icon">
+                  <path d="M4 6h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"></path>
+                  <path d="M4 14h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2z"></path>
+                </svg>
+                <span class="health-sub-name">Storage</span>
+              </div>
+              <span class="health-sub-val">92%</span>
+            </div>
+
+            <div class="health-subsystem-item">
+              <div class="health-subsystem-left">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="health-sub-icon">
+                  <path d="M12 20h.01"></path>
+                  <path d="M8.5 16.429a5 5 0 0 1 7 0"></path>
+                  <path d="M5 12.859a10 10 0 0 1 14 0"></path>
+                </svg>
+                <span class="health-sub-name">Network</span>
+              </div>
+              <span class="health-sub-val">97%</span>
+            </div>
           </div>
         </div>
       </div>

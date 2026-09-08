@@ -5,7 +5,7 @@ import './styles/modals.css';
 
 import { initialSurveillanceData } from './data/surveillanceData.js';
 import { renderSidebar } from './components/Sidebar.js';
-import { renderHeader } from './components/Header.js';
+import { renderHeader, getActiveOperator } from './components/Header.js';
 import { renderStatCards } from './components/StatCards.js';
 import { renderSurveillanceGrid } from './components/SurveillanceGrid.js';
 import { renderAlertsPanel } from './components/AlertsPanel.js';
@@ -130,7 +130,7 @@ function renderFullUI() {
       </main>
 
       <footer class="footer">
-        © 2025 IBVAP - Intelligent Border Video Analytics Platform. All rights reserved.
+        © 2025 IB<span style="color: #22C55E; font-weight: 700;">V</span>AP - Intelligent Border Video Analytics Platform. All rights reserved.
       </footer>
     </div>
 
@@ -307,6 +307,46 @@ function attachEventListeners() {
     }
   });
 
+  // Operator Profile Pill Dropdown Toggle
+  const operatorPill = document.getElementById('operator-profile-pill');
+  const operatorDropdown = document.getElementById('operator-dropdown-menu');
+  if (operatorPill && operatorDropdown) {
+    operatorPill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = operatorDropdown.classList.toggle('active');
+      operatorPill.classList.toggle('active', isOpen);
+      operatorPill.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (isOpen) playRadarBeep();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (operatorDropdown.classList.contains('active') && !operatorPill.contains(e.target)) {
+        operatorDropdown.classList.remove('active');
+        operatorPill.classList.remove('active');
+        operatorPill.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && operatorDropdown.classList.contains('active')) {
+        operatorDropdown.classList.remove('active');
+        operatorPill.classList.remove('active');
+        operatorPill.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // Operator Sign Out / Switch Session
+  const signoutBtn = document.getElementById('operator-signout-btn');
+  if (signoutBtn) {
+    signoutBtn.addEventListener('click', () => {
+      try {
+        localStorage.removeItem('ibvap_session');
+        localStorage.removeItem('ibvap_active_operator');
+      } catch (e) { }
+    });
+  }
+
   // Audio Mute/Unmute Toggle
   const audioBtn = document.getElementById('audio-toggle-btn');
   if (audioBtn) {
@@ -317,10 +357,11 @@ function attachEventListeners() {
     });
   }
 
-  // View All Alerts Link
+  // View All Alerts Links
   const viewAlertsLink = document.getElementById('btn-view-all-alerts');
   const viewActiveAlerts = document.getElementById('view-active-alerts-link');
-  [viewAlertsLink, viewActiveAlerts].forEach(el => {
+  const statViewAlerts = document.getElementById('stat-view-alerts');
+  [viewAlertsLink, viewActiveAlerts, statViewAlerts].forEach(el => {
     if (el) {
       el.addEventListener('click', () => {
         state.activeView = 'Events & Alerts';
@@ -331,19 +372,47 @@ function attachEventListeners() {
     }
   });
 
-  // View Full Map Links
+  // Emergency Button Handler
+  const emergencyBtn = document.getElementById('btn-emergency-action');
+  if (emergencyBtn) {
+    emergencyBtn.addEventListener('click', () => {
+      playAlertTone();
+      showToast('PERIMETER LOCKDOWN INITIATED', 'Code Red triggered. Sector barriers engaging.', true);
+    });
+  }
+
+  // Header Fullscreen Button
+  const fsBtn = document.getElementById('header-fullscreen-btn');
+  if (fsBtn) {
+    fsBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+        showToast('Display Mode', 'Entered Fullscreen Mode');
+      } else {
+        document.exitFullscreen().catch(() => {});
+        showToast('Display Mode', 'Exited Fullscreen Mode');
+      }
+    });
+  }
+
+  // View Full Map Links & Minimap Controls
   const viewMapLink = document.getElementById('btn-view-full-map');
   const minimapViewport = document.getElementById('minimap-viewport');
-  [viewMapLink, minimapViewport].forEach(el => {
-    if (el) {
-      el.addEventListener('click', () => {
-        state.activeView = 'Map View';
-        playRadarBeep();
-        renderFullUI();
-        attachEventListeners();
-      });
-    }
-  });
+  if (viewMapLink) {
+    viewMapLink.addEventListener('click', () => {
+      state.activeView = 'Map View';
+      playRadarBeep();
+      renderFullUI();
+      attachEventListeners();
+    });
+  }
+
+  const zoomIn = document.getElementById('map-zoom-in');
+  const zoomOut = document.getElementById('map-zoom-out');
+  const recenter = document.getElementById('map-recenter');
+  if (zoomIn) zoomIn.addEventListener('click', (e) => { e.stopPropagation(); showToast('GIS Map', 'Zoom Level: 14x'); });
+  if (zoomOut) zoomOut.addEventListener('click', (e) => { e.stopPropagation(); showToast('GIS Map', 'Zoom Level: 10x'); });
+  if (recenter) recenter.addEventListener('click', (e) => { e.stopPropagation(); showToast('GIS Map', 'Centered on BOP Alpha'); });
 
   // Incident Modal Handlers
   bindAlertInteractions();
@@ -399,13 +468,14 @@ function bindAlertInteractions() {
   const ackBtn = document.getElementById('btn-ack-alert');
   if (ackBtn) {
     ackBtn.addEventListener('click', async () => {
-      showToast('Incident Acknowledged', 'Logged in audit registry by Operator at BOP Alpha');
+      const op = typeof getActiveOperator === 'function' ? getActiveOperator() : { name: 'Ayush Chavhan', unit: 'BSF 142 Bn' };
+      showToast('Incident Acknowledged', `Logged in audit registry by ${op.name} (${op.unit})`);
       playRadarBeep();
       try {
         await fetch(`http://${window.location.hostname || 'localhost'}:8000/api/alerts/${state.activeAlertId || 'alert-1'}/action`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'ACKNOWLEDGED', operator: 'Inspector R. K. Sharma (BSF-9201)' })
+          body: JSON.stringify({ action: 'ACKNOWLEDGED', operator: `${op.name} (${op.unit})` })
         });
       } catch (e) { console.warn(e); }
       if (incidentModal) incidentModal.classList.remove('active');
