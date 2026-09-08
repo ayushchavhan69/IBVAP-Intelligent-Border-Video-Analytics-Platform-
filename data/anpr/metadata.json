@@ -1,0 +1,18 @@
+{
+  "dataset_name": "IBVAP Indian ANPR Benchmark & Watchlist",
+  "format": "HSRP Standard Compliant (India MoRTH standard)",
+  "total_plates": 8,
+  "hotlist_entries": 6,
+  "states_covered": [
+    "PB",
+    "MH",
+    "DL",
+    "HR",
+    "JK",
+    "RJ",
+    "UP",
+    "GJ"
+  ],
+  "purpose": "Automated Number Plate Recognition and Border Intercept Watchlist matching",
+  "license": "Public Open Benchmark / Synthetic Demonstration"
+}

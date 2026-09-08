@@ -1,0 +1,114 @@
+[
+  {
+    "plate_number": "PB10MF1234",
+    "vehicle_image": "vehicle_images/veh_PB10MF1234.jpg",
+    "crop_image": "license_plate_crops/PB10MF1234.jpg",
+    "bbox": [
+      200,
+      370,
+      320,
+      80
+    ],
+    "state": "Punjab",
+    "status": "STOLEN",
+    "priority": "HIGH"
+  },
+  {
+    "plate_number": "MH12AB5678",
+    "vehicle_image": "vehicle_images/veh_MH12AB5678.jpg",
+    "crop_image": "license_plate_crops/MH12AB5678.jpg",
+    "bbox": [
+      200,
+      370,
+      320,
+      80
+    ],
+    "state": "Maharashtra",
+    "status": "WANTED",
+    "priority": "HIGH"
+  },
+  {
+    "plate_number": "DL01XY7890",
+    "vehicle_image": "vehicle_images/veh_DL01XY7890.jpg",
+    "crop_image": "license_plate_crops/DL01XY7890.jpg",
+    "bbox": [
+      200,
+      370,
+      320,
+      80
+    ],
+    "state": "Delhi",
+    "status": "FLAGGED",
+    "priority": "MEDIUM"
+  },
+  {
+    "plate_number": "HR26DQ5555",
+    "vehicle_image": "vehicle_images/veh_HR26DQ5555.jpg",
+    "crop_image": "license_plate_crops/HR26DQ5555.jpg",
+    "bbox": [
+      200,
+      370,
+      320,
+      80
+    ],
+    "state": "Haryana",
+    "status": "STOLEN",
+    "priority": "CRITICAL"
+  },
+  {
+    "plate_number": "JK02AA1122",
+    "vehicle_image": "vehicle_images/veh_JK02AA1122.jpg",
+    "crop_image": "license_plate_crops/JK02AA1122.jpg",
+    "bbox": [
+      200,
+      370,
+      320,
+      80
+    ],
+    "state": "Jammu & Kashmir",
+    "status": "INTERCEPT",
+    "priority": "CRITICAL"
+  },
+  {
+    "plate_number": "RJ14CB9988",
+    "vehicle_image": "vehicle_images/veh_RJ14CB9988.jpg",
+    "crop_image": "license_plate_crops/RJ14CB9988.jpg",
+    "bbox": [
+      200,
+      370,
+      320,
+      80
+    ],
+    "state": "Rajasthan",
+    "status": "CLEARED",
+    "priority": "LOW"
+  },
+  {
+    "plate_number": "UP32EF4321",
+    "vehicle_image": "vehicle_images/veh_UP32EF4321.jpg",
+    "crop_image": "license_plate_crops/UP32EF4321.jpg",
+    "bbox": [
+      200,
+      370,
+      320,
+      80
+    ],
+    "state": "Uttar Pradesh",
+    "status": "CLEARED",
+    "priority": "LOW"
+  },
+  {
+    "plate_number": "GJ01KM7766",
+    "vehicle_image": "vehicle_images/veh_GJ01KM7766.jpg",
+    "crop_image": "license_plate_crops/GJ01KM7766.jpg",
+    "bbox": [
+      200,
+      370,
+      320,
+      80
+    ],
+    "state": "Gujarat",
+    "status": "MONITORED",
+    "priority": "MEDIUM"
+  }
+]

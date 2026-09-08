@@ -21,6 +21,10 @@ dist-ssr
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
-
 test_cam_grid.png
+
+# Python & SQLite
+__pycache__/
+*.pyc
+*.db
+outputs/

@@ -1,0 +1,27 @@
+{
+  "camera_id": "CAM-01",
+  "name": "BOP Alpha - North Gate",
+  "location": "North Perimeter Gate Sector 2",
+  "scenario": "Pedestrian entrance/gate surveillance",
+  "original_file": "data/surveillance/cam_01_gate/videos/original/people-detection.mp4",
+  "processed_file": "data/surveillance/cam_01_gate/videos/processed/gate_surveillance_loop.mp4",
+  "resolution": "768x432",
+  "width": 768,
+  "height": 432,
+  "fps": 12.0,
+  "frame_count": 596,
+  "duration_seconds": 49.67,
+  "primary_model": "YOLOv8n-Border-Trained",
+  "target_classes": [
+    "person"
+  ],
+  "key_frames": [
+    "frames/frame_000.jpg",
+    "frames/frame_001.jpg",
+    "frames/frame_002.jpg",
+    "frames/frame_003.jpg",
+    "frames/frame_004.jpg"
+  ],
+  "license": "Apache License 2.0",
+  "source_dataset": "Intel OpenVINO Surveillance Benchmark"
+}

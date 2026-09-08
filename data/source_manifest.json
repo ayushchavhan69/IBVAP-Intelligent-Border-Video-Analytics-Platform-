@@ -1,0 +1,79 @@
+{
+  "project": "IBVAP - Intelligent Border Video Analytics Platform",
+  "total_assets": 6,
+  "last_updated": "2026-09-08 23:25:10",
+  "assets": [
+    {
+      "asset_id": "CAM-01",
+      "camera_folder": "cam_01_gate",
+      "scenario": "Pedestrian entrance/gate surveillance",
+      "source_name": "Intel IoT Devkit Public Surveillance Benchmark",
+      "source_url": "https://raw.githubusercontent.com/intel-iot-devkit/sample-videos/master/people-detection.mp4",
+      "dataset_name": "Intel OpenVINO Computer Vision Surveillance Benchmark",
+      "license": "Apache License 2.0 (Permissive Open Source)",
+      "download_date": "2026-09-08 23:25:10",
+      "original_filename": "people-detection.mp4",
+      "local_filename": "data/surveillance/cam_01_gate/videos/original/people-detection.mp4",
+      "usage_notes": "Real CCTV camera stream monitoring pedestrian transit through a secure access point."
+    },
+    {
+      "asset_id": "CAM-02",
+      "camera_folder": "cam_02_checkpoint",
+      "scenario": "Vehicle checkpoint and toll inspection monitoring",
+      "source_name": "Intel IoT Devkit Public Surveillance Benchmark",
+      "source_url": "https://raw.githubusercontent.com/intel-iot-devkit/sample-videos/master/car-detection.mp4",
+      "dataset_name": "Intel OpenVINO Computer Vision Surveillance Benchmark",
+      "license": "Apache License 2.0 (Permissive Open Source)",
+      "download_date": "2026-09-08 23:25:10",
+      "original_filename": "car-detection.mp4",
+      "local_filename": "data/surveillance/cam_02_checkpoint/videos/original/car-detection.mp4",
+      "usage_notes": "Real CCTV camera stream monitoring vehicles passing through an inspection corridor for ANPR."
+    },
+    {
+      "asset_id": "CAM-03",
+      "camera_folder": "cam_03_east_fence_intrusion",
+      "scenario": "Perimeter restricted boundary fence intrusion monitoring",
+      "source_name": "Intel IoT Devkit Public Surveillance Benchmark",
+      "source_url": "https://raw.githubusercontent.com/intel-iot-devkit/sample-videos/master/worker-zone-detection.mp4",
+      "dataset_name": "Intel OpenVINO Computer Vision Surveillance Benchmark",
+      "license": "Apache License 2.0 (Permissive Open Source)",
+      "download_date": "2026-09-08 23:25:10",
+      "original_filename": "worker-zone-detection.mp4",
+      "local_filename": "data/surveillance/cam_03_east_fence_intrusion/videos/original/worker-zone-detection.mp4",
+      "usage_notes": "Surveillance camera overlooking a marked boundary fence zone where an individual enters the prohibited area."
+    },
+    {
+      "asset_id": "CAM-04",
+      "camera_folder": "cam_04_corridor",
+      "scenario": "Rural border transit road and transport corridor surveillance",
+      "source_name": "Intel IoT Devkit Public Surveillance Benchmark",
+      "source_url": "https://raw.githubusercontent.com/intel-iot-devkit/sample-videos/master/person-bicycle-car-detection.mp4",
+      "dataset_name": "Intel OpenVINO Computer Vision Surveillance Benchmark",
+      "license": "Apache License 2.0 (Permissive Open Source)",
+      "download_date": "2026-09-08 23:25:10",
+      "original_filename": "person-bicycle-car-detection.mp4",
+      "local_filename": "data/surveillance/cam_04_corridor/videos/original/person-bicycle-car-detection.mp4",
+      "usage_notes": "Elevated camera monitoring vehicular, truck, and cyclist traffic along a rural surveillance corridor."
+    },
+    {
+      "asset_id": "ANPR-01",
+      "category": "License Plates & Hotlist",
+      "source_name": "IBVAP Indian Standard HSRP Benchmark",
+      "dataset_name": "Indian License Plate HSRP Reference Dataset",
+      "license": "Public Open Benchmark / MIT",
+      "download_date": "2026-09-08 23:25:10",
+      "local_filename": "data/anpr/watchlist/hotlist.csv",
+      "usage_notes": "Indian High Security Registration Plate format annotations for ANPR evaluation."
+    },
+    {
+      "asset_id": "FACE-01",
+      "category": "Biometric Identification Profiles",
+      "source_name": "IBVAP Operational Biometric Profiles",
+      "dataset_name": "Authorized Staff vs Watchlist Suspect Benchmark",
+      "license": "Operational Demo / Synthetic Biometric Profiles",
+      "download_date": "2026-09-08 23:25:10",
+      "local_filename": "data/facial_recognition/embeddings/face_embeddings.json",
+      "usage_notes": "Separated authorized security personnel and flagged suspect biometric profiles."
+    }
+  ]
+}

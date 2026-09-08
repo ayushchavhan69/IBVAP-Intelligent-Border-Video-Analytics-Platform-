@@ -44,14 +44,15 @@ export function renderSurveillanceGrid(cameras, currentTimeStr = '11:30:45 AM') 
       <div class="camera-matrix" id="camera-matrix-container">
         ${cameras.map(cam => `
           <div 
-            class="camera-feed-card ${cam.alertLevel === 'critical' ? 'breach-alert' : ''}" 
+            class="camera-feed-card ${cam.alertLevel === 'critical' || cam.is_breached ? 'breach-alert' : ''}" 
             data-camera-id="${cam.id}" 
             title="Click to expand ${cam.name}"
           >
             <img 
-              src="${cam.image}" 
+              src="${cam.image || `http://localhost:8000/video_feed/${cam.id}`}" 
               alt="${cam.name}" 
               class="camera-feed-img" 
+              onerror="this.onerror=null;this.src='/assets/${cam.id.replace('-', '')}.jpg';"
               loading="eager" 
             />
 

@@ -1,0 +1,11 @@
+{
+  "dataset_name": "IBVAP Operational Biometric Identification Profiles",
+  "profiles_count": 5,
+  "authorized_count": 3,
+  "suspects_count": 2,
+  "embedding_dimensions": 256,
+  "matching_algorithm": "Cosine Similarity / L2 Euclidean Distance",
+  "threshold": 0.72,
+  "purpose": "Border gate face match and watchlist intercept alerting",
+  "license": "Operational Demo / Synthetic Biometric Profiles"
+}

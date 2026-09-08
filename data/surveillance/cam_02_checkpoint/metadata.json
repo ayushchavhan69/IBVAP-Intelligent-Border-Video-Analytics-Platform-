@@ -1,0 +1,30 @@
+{
+  "camera_id": "CAM-02",
+  "name": "Check Post - Road 32",
+  "location": "Highway Checkpost Sector 4",
+  "scenario": "Vehicle checkpoint and ANPR inspection monitoring",
+  "original_file": "data/surveillance/cam_02_checkpoint/videos/original/car-detection.mp4",
+  "processed_file": "data/surveillance/cam_02_checkpoint/videos/processed/checkpoint_loop.mp4",
+  "resolution": "768x432",
+  "width": 768,
+  "height": 432,
+  "fps": 12.5,
+  "frame_count": 377,
+  "duration_seconds": 30.16,
+  "primary_model": "VehicleClassNet-v3 + ANPR-OCR",
+  "target_classes": [
+    "car",
+    "truck",
+    "bus",
+    "motorcycle"
+  ],
+  "key_frames": [
+    "frames/frame_000.jpg",
+    "frames/frame_001.jpg",
+    "frames/frame_002.jpg",
+    "frames/frame_003.jpg",
+    "frames/frame_004.jpg"
+  ],
+  "license": "Apache License 2.0",
+  "source_dataset": "Intel OpenVINO Surveillance Benchmark"
+}

@@ -1,0 +1,7 @@
+plate_number,status,priority,description
+PB10MF1234,STOLEN,HIGH,Suspected contraband transport - Sector 4 intercept
+MH12AB5678,WANTED,HIGH,Permit expired; unauthorized border transit
+DL01XY7890,FLAGGED,MEDIUM,Night curfew violation near BOP checkpost
+HR26DQ5555,STOLEN,CRITICAL,Armed vehicle escort alert - BSF command flag
+JK02AA1122,INTERCEPT,CRITICAL,Zero-line corridor restriction match
+GJ01KM7766,MONITORED,MEDIUM,Routine border district surveillance tag

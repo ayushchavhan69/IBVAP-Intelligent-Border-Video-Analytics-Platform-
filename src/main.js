@@ -51,6 +51,67 @@ function initApp() {
   renderFullUI();
   setupGlobalClock();
   attachEventListeners();
+  connectTelemetryWebSocket();
+}
+
+// Real-Time WebSocket Telemetry Receiver
+function connectTelemetryWebSocket() {
+  const wsUrl = `ws://${window.location.hostname || 'localhost'}:8000/ws/telemetry`;
+  let ws;
+
+  try {
+    ws = new WebSocket(wsUrl);
+  } catch (err) {
+    console.warn('[IBVAP] WebSocket connection failed:', err);
+    return;
+  }
+
+  ws.onopen = () => {
+    console.log('[IBVAP] Connected to Live AI Telemetry Engine over WebSocket.');
+    showToast('AI Telemetry Stream', 'Connected to YOLOv8 Edge Inference Hub');
+  };
+
+  ws.onmessage = (event) => {
+    try {
+      const msg = JSON.parse(event.data);
+      if (msg.stats) {
+        state.data.stats = msg.stats;
+        // Dynamically update stat cards without re-rendering the whole page
+        const statCards = document.querySelectorAll('.stat-card');
+        if (statCards.length >= 5) {
+          const vals = [msg.stats.persons?.count, msg.stats.vehicles?.count, msg.stats.faces?.count, msg.stats.anpr?.count, msg.stats.alerts?.count];
+          statCards.forEach((card, idx) => {
+            const numEl = card.querySelector('.stat-value');
+            if (numEl && vals[idx]) numEl.textContent = vals[idx];
+          });
+        }
+      }
+
+      // Check if any camera is in critical breach status
+      if (msg.cameras) {
+        msg.cameras.forEach(cam => {
+          const card = document.querySelector(`.camera-feed-card[data-camera-id="${cam.id}"]`);
+          if (card) {
+            if (cam.is_breached) {
+              if (!card.classList.contains('breach-alert')) {
+                card.classList.add('breach-alert');
+                playAlertTone();
+              }
+            } else {
+              card.classList.remove('breach-alert');
+            }
+          }
+        });
+      }
+    } catch (e) {
+      // Ignored non-json packet
+    }
+  };
+
+  ws.onclose = () => {
+    console.log('[IBVAP] Telemetry WebSocket disconnected. Reconnecting in 3s...');
+    setTimeout(connectTelemetryWebSocket, 3000);
+  };
 }
 
 function renderFullUI() {
@@ -334,29 +395,50 @@ function bindAlertInteractions() {
     });
   }
 
-  // Modal Action Buttons
+  // Modal Action Buttons (Tied to SQLite Audit Trail)
   const ackBtn = document.getElementById('btn-ack-alert');
   if (ackBtn) {
-    ackBtn.addEventListener('click', () => {
+    ackBtn.addEventListener('click', async () => {
       showToast('Incident Acknowledged', 'Logged in audit registry by Operator at BOP Alpha');
       playRadarBeep();
+      try {
+        await fetch(`http://${window.location.hostname || 'localhost'}:8000/api/alerts/${state.activeAlertId || 'alert-1'}/action`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'ACKNOWLEDGED', operator: 'Inspector R. K. Sharma (BSF-9201)' })
+        });
+      } catch (e) { console.warn(e); }
       if (incidentModal) incidentModal.classList.remove('active');
     });
   }
 
   const dispatchBtn = document.getElementById('btn-dispatch-qrf');
   if (dispatchBtn) {
-    dispatchBtn.addEventListener('click', () => {
+    dispatchBtn.addEventListener('click', async () => {
       showToast('QRF Patrol Dispatched', 'Quick Reaction Force Unit 3 dispatched to East Perimeter', true);
       playAlertTone();
+      try {
+        await fetch(`http://${window.location.hostname || 'localhost'}:8000/api/alerts/${state.activeAlertId || 'alert-1'}/action`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'QRF_PATROL_DISPATCHED', operator: 'Commandant V. S. Chauhan (BSF-0012)' })
+        });
+      } catch (e) { console.warn(e); }
       if (incidentModal) incidentModal.classList.remove('active');
     });
   }
 
   const dismissBtn = document.getElementById('btn-dismiss-alert');
   if (dismissBtn) {
-    dismissBtn.addEventListener('click', () => {
+    dismissBtn.addEventListener('click', async () => {
       showToast('Alert Dismissed', 'Marked as benign activity in surveillance logs');
+      try {
+        await fetch(`http://${window.location.hostname || 'localhost'}:8000/api/alerts/${state.activeAlertId || 'alert-1'}/action`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'DISMISSED_FALSE_ALARM', operator: 'Sub-Inspector Pooja Verma' })
+        });
+      } catch (e) { console.warn(e); }
       if (incidentModal) incidentModal.classList.remove('active');
     });
   }
